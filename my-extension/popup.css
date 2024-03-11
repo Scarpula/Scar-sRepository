@@ -1,0 +1,37 @@
+body{
+    width: 300px;
+    padding: 20px;
+    font-family: Arial,sans-serif;
+}
+#productInfo{
+    margin-bottom: 20px;
+}
+
+input[type="text"],
+
+input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    box-sizing: border-box;
+}
+
+h1{
+    font-size: 16px;
+    color: #333;
+}
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+#status{
+    margin-top: 20px;
+}
