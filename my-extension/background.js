@@ -23,9 +23,9 @@ function fetchProductInfo(url) {
             }
 
             let productDetails = {
-                title: doc.querySelector('.product-title')?.innerText,
-                price: doc.querySelector('.product-price')?.innerText,
-                imageUrls: imageUrls  // Notice it's an array of image URLs now
+                title: document.querySelector('#productTitle')?.innerText.trim(),
+                price: document.querySelector('.a-price-whole')?.innerText.trim(),
+                imageUrls: Array.from(document.querySelectorAll('.aplus-v2 img')).map(img => img.src || img.getAttribute('data-src'))
             };
 
             resolve(productDetails);
@@ -69,3 +69,25 @@ chrome.runtime.onMessage.addListener((message,sender,sendResponse) =>{
         return true;
     }
 });
+function uploadProductToSmartStore(productDetails){
+    const apiUrl = "https://api.smartstore.com/products/upload";
+    const apiToken = "YOUR_API_TOKEN_HERE";
+
+    fetch(apiUrl,{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json",
+            "Authorization":`Bearer ${apiToken}`
+        },
+        body:JSON.stringify(productDetails)        
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("상품 업로드 성공:",data);
+        //여기서 팝업 등에 성공 메세지를 보내거나 추가 처리
+    })
+    .catch(error => {
+        console.error("상품 업로드 실패:",error);
+        //에러 처리 로직
+    });
+}   
