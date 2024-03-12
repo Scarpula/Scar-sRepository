@@ -47,3 +47,25 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         return true; // Indicates we will send a response asynchronously
     }
 });
+chrome.runtime.onMessage.addListener((message,sender,sendResponse) =>{
+    if(message.type === 'CRAWL_START'){
+        console.log('Starting to crawl product infomation from:',message.url);
+        //현재 활성 탭에 메세지를 전송하여 content.js 에서 크롤링을 시작하도록 함.
+        chrome.tabs.query({active: true, currentWindow: true},function(tabs){
+            const currentTabId = tabs[0].id;
+
+            //콘텐츠 스크립트에 메세지를 전송합니다.
+            chrome.tabs.sendMessage(currentTabId,{type:"START_CRAWLING"},function(response){
+                if(response.status==='success'){
+                    console.log('Crawling response received',response.data);
+                    //처리 결과를 popup.js나 다른 리스너로 보낼수 있음
+                    sendResponse({status: 'success', data: response.data});
+                }else{
+                    console.error('Crawling failed:',response.message);
+                    sendResponse({status:'error',message:response.message});
+                }
+            });
+        });
+        return true;
+    }
+});
